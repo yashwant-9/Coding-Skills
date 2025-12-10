@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,12 +23,6 @@ int login() {
         if (strcmp(inUser, u) == 0 && strcmp(inPass, p) == 0) {
             strcpy(currentUser, u);
             strcpy(currentRole, r);
-            /* Remove any trailing whitespace/newline from role */
-            int len = strlen(currentRole);
-            while (len > 0 && (currentRole[len-1] == '\n' || currentRole[len-1] == '\r' || currentRole[len-1] == ' ')) {
-                currentRole[len-1] = '\0';
-                len--;
-            }
             fclose(fp);
             return 1;
         }
@@ -84,14 +79,6 @@ void displayStudents() {
 }
 void str_to_lower(char *s) {
     while (*s) { *s = (char) tolower((unsigned char)*s); s++; }
-}
-
-void trim_whitespace(char *s) {
-    int len = strlen(s);
-    while (len > 0 && (s[len-1] == '\n' || s[len-1] == '\r' || s[len-1] == ' ')) {
-        s[len-1] = '\0';
-        len--;
-    }
 }
 void searchStudentByName() {
     char q[50];
@@ -368,24 +355,9 @@ int main() {
         printf("Invalid login!\n");
         return 0;
     }
-    
-    /* Clean up role string */
-    trim_whitespace(currentRole);
-    
     printf("Logged in as: %s\n", currentRole);
-    
-    /* Convert role to lowercase for comparison */
-    char roleCheck[20];
-    strcpy(roleCheck, currentRole);
-    str_to_lower(roleCheck);
-    
-    if (strcmp(roleCheck, "admin") == 0) {
-        adminMenu();
-    } else if (strcmp(roleCheck, "staff") == 0) {
-        staffMenu();
-    } else {
-        guestMenu();
-    }
-    
+    if (strcmp(currentRole,"admin")==0) adminMenu();
+    else if (strcmp(currentRole,"staff")==0) staffMenu();
+    else guestMenu();
     return 0;
 }
